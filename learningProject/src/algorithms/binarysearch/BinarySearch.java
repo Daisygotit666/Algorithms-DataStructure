@@ -8,7 +8,7 @@ public class BinarySearch{
   /**
    * @param a 待查找的升序数组
    * @param target 待查找的目标值
-   * @return 找到返回索引 找不到返回-1
+   * @return 找到返回索引 找不到返回-1  test！！
    */
   public static int binarysearchBasic(int[] a, int target) {
     int i = 0, j = a.length - 1;
@@ -178,5 +178,6 @@ public class BinarySearch{
      *  4 < x < 7 -> rightmost(4)+1 ... leftmost(7)-1
      */
 
+  
 
 }
