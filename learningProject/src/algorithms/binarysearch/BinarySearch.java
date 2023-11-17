@@ -86,7 +86,7 @@ public class BinarySearch{
       */
      public static int binarysearchBalance(int[] a, int target) {
       int i = 0, j = a.length;     
-      while(1 < j - i) {            // 2.  如果是 i<=j  j 会一直等于m 会陷入死循环嘞
+      while(1 < j - i) {            // 2.  
         int m = (i+j)/2;
         if (target < a[m]) {
           j = m;                // 3.
@@ -139,6 +139,7 @@ public class BinarySearch{
       return candidate;
     }
 
+
     // 没找到的话让返回值更有用
     // 返回 >= target的最靠左的索引
     public static int binarysearchLeftMostAlternative(int[] a, int target) {
@@ -167,6 +168,18 @@ public class BinarySearch{
       }
       return i - 1;
     }
+
+    /**
+     * 我的小tips：
+     * 1. 画一个长度为6的数组， 选一个target
+     * 2. 根据满足的条件假设i = j的索引位置
+     * 3. 分析target和a[m]的大小关系， 找到while循环可以终止的条件
+     * 4. 但要记住： 找target的右边的索引 返回的是i， 找target的左边的索引 返回的是i-1
+     * 
+     */
+
+
+
 
     /**  理解 ↓
      *  [1 2 4 4 4 7 7]
