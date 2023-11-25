@@ -4,14 +4,9 @@ import java.util.Iterator;
 import java.util.function.Consumer;
 
 // 单向链表
-public class SinglyLinkedList implements Iterable<Integer>{ // 整体
-  Node head = null; // 头指针
+public class SinglyLinkedListSentinel implements Iterable<Integer>{ // 整体
+  private Node head = new Node(666, null); // 头指针指向一个哨兵节点
 
-
-  /**
-   * 节点类（内部类） 外部知道越少的东西越好
-   * java中的指针是引用
-   */
   private static class Node{
     int value; //值
     Node next; //下一个节点指针
@@ -23,18 +18,12 @@ public class SinglyLinkedList implements Iterable<Integer>{ // 整体
 
   // 向链表头部添加
   public void addFirst(int value) {
-    // 1. 链表为空
-    // head = new Node(value, null);
-    // 2. 链表非空
-    head = new Node(value, head);
+    insert(0, value);
   }
   
 
-  // 遍历链表
-  // 对链表的操作最好不要放在循环里面 而是当作参数传递过来
-  // 调用： list.loop(value -> {System.out.println(value);})
   public void loop1(Consumer<Integer> consumer) {
-    Node p = head;
+    Node p = head.next;
     while(p != null){
       consumer.accept(p.value);
       p = p.next;
@@ -42,24 +31,9 @@ public class SinglyLinkedList implements Iterable<Integer>{ // 整体
   }
 
   public void loop2(Consumer<Integer> consumer) {
-    for(Node p = head; p != null; p = p.next){
+    for(Node p = head.next; p != null; p = p.next){
       consumer.accept(p.value);
     }
-  }
-  
-  // 用递归方式进行遍历
-  // 调用： list.loop3(value ->{System.out.println("before"+ value);}, value ->{System.out.println("after"+ value);});
-  public void loop3(Consumer<Integer> before, Consumer<Integer> after) {
-    recursion(head, before, after);
-  }
-
-  public void recursion(Node curr, Consumer<Integer> before, Consumer<Integer> after){ // 针对某个节点要进行的操作
-    if(curr == null){
-      return;
-    }
-    before.accept(curr.value);
-    recursion(curr.next, before, after);
-    before.accept(curr.value);
   }
 
 
@@ -68,7 +42,7 @@ public class SinglyLinkedList implements Iterable<Integer>{ // 整体
   public Iterator<Integer> iterator() {
     // 匿名内部类
     return new Iterator<Integer>() {
-      Node p = head;
+      Node p = head.next;
       public boolean hasNext() { // 是否有下一个元素
         return p.next != null;
       }
@@ -82,9 +56,6 @@ public class SinglyLinkedList implements Iterable<Integer>{ // 整体
 
   // 在尾部添加
   private Node findLast(){
-    if (head == null){
-      return null;
-    }
     Node p;
     // 这里是p.next != null 因为要让p指向最后一个节点，而不是外部
     for(p = head; p.next!= null; p = p.next);
@@ -92,16 +63,12 @@ public class SinglyLinkedList implements Iterable<Integer>{ // 整体
   }
 
   public void addLast(int value) {
-    Node last = findLast();
-    if (last == null){
-      addFirst(value);
-      return;
-    }
+    Node last = findLast();                      // 区别 1
     last.next = new Node(value, null);
   }
 
   private Node findNode(int index) {
-    int i = 0;
+    int i = -1;
     for(Node p = head; p != null; p = p.next, i++){
       if(i == index){
         return p;
@@ -121,10 +88,6 @@ public class SinglyLinkedList implements Iterable<Integer>{ // 整体
 
   // 向索引位置插入
   public void insert(int value, int index){
-    if(index==0){
-      addFirst(value);
-      return;
-    }
     Node pBefore = findNode(index-1);
     if (pBefore == null){
       throw new IllegalArgumentException(String.format("index[%d] 不合法%n", index));
@@ -141,10 +104,7 @@ public class SinglyLinkedList implements Iterable<Integer>{ // 整体
   }
 
   public void remove(int index){
-    if (index==0){
-      removeFirst();
-      return;
-    }
+
     Node pBefore = findNode(index-1);
     if (pBefore == null){  // 如果上一个节点是null
       throw new IllegalArgumentException(String.format("index[%d] 不合法%n", index));
